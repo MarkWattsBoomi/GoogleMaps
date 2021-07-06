@@ -15,9 +15,10 @@
   "author": "Dell Boomi",
   "license": "MIT",
   "dependencies": {
+    "@types/googlemaps": "^3.43.3",
     "buffer": "^6.0.3",
     "flow-component-model": "^1.7.1",
-    "react": "^16.3.2",
+    "react": "^16.14.0",
     "stream": "0.0.2",
     "timers": "^0.1.1"
   },

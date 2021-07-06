@@ -1,9 +1,10 @@
 import { addMarker, findNearby } from './MapFunctions';
 
-export async function showLocal(map: any, currentPosition: any, poiTypeNames: string): Promise<any[]> {
+export async function showLocal(map: google.maps.Map, currentPosition: any, poiTypeNames: string): Promise<any[]> {
     const markers: any[] = [];
     markers.push(
         addMarker(
+            map,
             currentPosition.coords.latitude,
             currentPosition.coords.longitude,
             'Me',
@@ -20,6 +21,7 @@ export async function showLocal(map: any, currentPosition: any, poiTypeNames: st
             pointsOfInterest.forEach((result: any) => {
                 markers.push(
                     addMarker(
+                        map,
                         result.geometry.location.lat(),
                         result.geometry.location.lng(),
                         result.name,

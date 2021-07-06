@@ -1,5 +1,3 @@
-import { Marker } from 'google-maps-react';
-import React = require('react');
 
 export async function getCurrentLocation(options?: any): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -26,21 +24,23 @@ export async function findNearby(map: any, currentPosition: any, keys: string[],
 
 }
 
-export function addMarker(latitude: number, longitude: number, label: string, tooltip: string, place: any, icon: string): any {
+export function addMarker(map: google.maps.Map, latitude: number, longitude: number, label: string, tooltip: string, place: google.maps.Place, icon: string): any {
     // const placeLoc = place.geometry.location;
-    const pos: any = {lat: latitude, lng: longitude};
-    return (
-        <Marker
-            position={pos}
-            label={label}
-            title={tooltip}
-            onClick={(marker: any) => {openInfoWindow(marker, place); }}
-            icon={icon}
-        />
-    );
+    const pos: google.maps.LatLng = new google.maps.LatLng({lat: latitude, lng: longitude});
+
+    let marker: google.maps.Marker = new google.maps.Marker({
+        map: map,
+        position: pos,
+        place: place,
+        icon: icon,
+    });
+
+    marker.addListener("click",this.openInfoWindow)
+
+    return marker;
 }
 
-export function openInfoWindow(marker: any, place: any) {
+export function openInfoWindow(marker: google.maps.Marker, place: any) {
     const contentString = '<div id="content">' +
         '<div id="siteNotice">' +
         '</div>' +
@@ -53,6 +53,6 @@ export function openInfoWindow(marker: any, place: any) {
     const infowindow = new google.maps.InfoWindow({
         content: contentString,
       });
-    infowindow.setPosition(marker.position);
+    infowindow.setPosition(marker.getPosition());
     infowindow.open(this.map);
 }
