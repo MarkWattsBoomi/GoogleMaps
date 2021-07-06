@@ -1,15 +1,16 @@
 import { addMarker, findNearby } from './MapFunctions';
 
-export async function showLocal(map: google.maps.Map, currentPosition: any, poiTypeNames: string): Promise<any[]> {
+export async function showLocal(map: google.maps.Map, currentPosition: google.maps.LatLng, poiTypeNames: string): Promise<any[]> {
     const markers: any[] = [];
+    let place: any = {name: "Me", vicinity: "me"};
+    
     markers.push(
         addMarker(
             map,
-            currentPosition.coords.latitude,
-            currentPosition.coords.longitude,
+            currentPosition,
             'Me',
             'I am here',
-            null,
+            place,
             null,
         ),
     );
@@ -22,8 +23,7 @@ export async function showLocal(map: google.maps.Map, currentPosition: any, poiT
                 markers.push(
                     addMarker(
                         map,
-                        result.geometry.location.lat(),
-                        result.geometry.location.lng(),
+                        result.geometry.location,
                         result.name,
                         result.vicinity,
                         result,

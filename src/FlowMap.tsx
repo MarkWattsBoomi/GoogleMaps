@@ -11,7 +11,7 @@ export default class FlowMap extends FlowComponent {
 
     context: any;
 
-    currentPosition: any;
+    currentPosition: google.maps.LatLng;
     os: string;
     browser: string;
     browserManu: string;
@@ -41,7 +41,7 @@ export default class FlowMap extends FlowComponent {
         this.browser = navigator.product;
         this.browserManu = navigator.vendor;
 
-        this.currentPosition = await getCurrentLocation();
+        
 
        this.beginMapsApi();
     }
@@ -69,10 +69,10 @@ export default class FlowMap extends FlowComponent {
     // fires when the maps script has loaded
     async apiLoaded() {
         this.googleLoaded = true;
-        let center: google.maps.LatLng = new google.maps.LatLng({lat: this.currentPosition.coords.latitude, lng: this.currentPosition.coords.longitude});
+        this.currentPosition = await getCurrentLocation();
         this.map = new google.maps.Map(document.getElementById("map") as HTMLElement ,{
-            center: center,
-            zoom: 8
+            center: this.currentPosition,
+            zoom: parseInt(this.getAttribute("zoom","8"))
         });
         this.showMarkers();
     }
