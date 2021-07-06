@@ -1,9 +1,9 @@
-import { FlowComponent } from 'flow-component-model';
+import { FlowComponent, FlowObjectData } from 'flow-component-model';
 import * as React from 'react';
 import { CSSProperties } from 'react';
 
 import { showLocal } from './LocalMode';
-import { getCurrentLocation } from './MapFunctions';
+import { addMarker, getCurrentLocation } from './MapFunctions';
 
 declare const manywho: any;
 
@@ -20,8 +20,6 @@ export default class FlowMap extends FlowComponent {
 
     google: any;
     googleLoaded: boolean = false;
-
-    markers: any[] = [];
 
     constructor(props: any) {
         super(props);
@@ -83,13 +81,29 @@ export default class FlowMap extends FlowComponent {
 
     // this triggers when the map page element is ready from the event handler on <Map>
     async showMarkers() {
+
+        this.model.dataSource.items.forEach((marker: FlowObjectData) => {
+            let place: any = {name: "Me", vicinity: "me"};
+            addMarker(this.map,new google.maps.LatLng(
+                {
+                    lat: marker.properties["Latitude"].value as number, 
+                    lng: marker.properties["Latitude"].value as number
+                })
+                ,
+                marker.properties["Label"].value as string,
+                "",
+                place
+                ,
+                null
+            )
+        });
         // decide what to do based on attribute "mode"
         const mode = this.getAttribute('mode', 'local');
         switch (mode) {
             case 'local':
             default:
                 const poiTypes: string = this.getAttribute('poiTypes', '');
-                this.markers = await showLocal(this.map, this.currentPosition, poiTypes);
+                showLocal(this.map, this.currentPosition, poiTypes);
                 break;
         }
 
